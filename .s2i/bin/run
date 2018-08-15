@@ -1,0 +1,13 @@
+#!/bin/bash -e
+
+# Command line arguments given to this script
+args="$*"
+
+# Global S2I variable setup
+source /usr/local/s2i/s2i-setup
+
+# Always include jolokia-opts, which can be empty if switched off via env
+export JAVA_OPTIONS="${JAVA_OPTIONS:+${JAVA_OPTIONS} }$(/opt/jolokia/jolokia-opts) $(source /opt/hawkular/hawkular-opts && get_hawkular_opts)"
+
+echo "Starting the Java application using /opt/run-java/run-java.sh with Dynatrace ..."
+exec /deployments/opt/dynatrace/oneagent/dynatrace-agent64.sh /opt/run-java/run-java.sh $args ${JAVA_ARGS}
