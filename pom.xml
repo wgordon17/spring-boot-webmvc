@@ -64,6 +64,15 @@
 
   <dependencies>
 
+    <!-- New Relic -->
+    <dependency>
+      <groupId>com.newrelic.agent.java</groupId>
+      <artifactId>newrelic-java</artifactId>
+      <version>4.4.0</version>
+      <scope>provided</scope>
+      <type>zip</type>
+    </dependency>
+
     <!-- spring-boot -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -143,6 +152,30 @@
               <goal>resource</goal>
               <goal>build</goal>
             </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Unzip New Relic Java agent into /deployments -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.1.1</version>
+        <executions>
+          <execution>
+            <id>unpack-newrelic</id>
+            <phase>package</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <includeGroupIds>com.newrelic.agent.java</includeGroupIds>
+              <includeArtifactIds>newrelic-java</includeArtifactIds>
+              <overWriteReleases>false</overWriteReleases>
+              <overWriteSnapshots>false</overWriteSnapshots>
+              <overWriteIfNewer>true</overWriteIfNewer>
+              <outputDirectory>/deployments</outputDirectory>
+            </configuration>
           </execution>
         </executions>
       </plugin>
